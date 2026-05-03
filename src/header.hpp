@@ -8,7 +8,7 @@
 	#include <winsock2.h>
 	#include <ws2tcpip.h>
 	int get_last_error() { return WSAGetLastError(); }  // Return result of WSAGetLastError()
-	#define SHUT_WR SD_SEND	   // Different approach on Linux
+	#define SHUT_WR SD_SEND
 #else
 	#include <sys/socket.h>  // socket, binf, sendto, recvfrom
 	#include <netinet/in.h>  // sockaddr_in, IPROTO-UDP and similar
@@ -20,7 +20,6 @@
 	#define SOCKET int       // On Linux socket is just an int
 	#define INVALID_SOCKET -1  // Not present on Linux
     #define SOCKET_ERROR   -1  // Not present on Linux
-	// #define SD_SEND SHUT_WR	   // Different approach on Linux - Pending move to Windows
 	int get_last_error () { return errno; }  // Return errno
 	#define closesocket close
 #endif
