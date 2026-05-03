@@ -6,7 +6,7 @@
 namespace sck
 {
 
-std::optional<std::vector<uint8_t>> send_udp(Conf conf)
+std::optional<std::vector<char>> send_udp(Conf conf)
 {
     #ifdef _WIN32
 		WSADATA wsa_data;
@@ -56,7 +56,7 @@ std::optional<std::vector<uint8_t>> send_udp(Conf conf)
     freeaddrinfo(result);
 
     constexpr int DEFAULT_BUFLEN { 65536 };
-    std::vector<uint8_t> recvbuf ( DEFAULT_BUFLEN );
+    std::vector<char> recvbuf ( DEFAULT_BUFLEN );
     sockaddr from_address;
     socklen_t from_address_length { sizeof(from_address) };
     const ssize_t indicator_recv { recvfrom(udp_socket, recvbuf.data(), recvbuf.size(), 0, &from_address, &from_address_length) };
@@ -74,7 +74,7 @@ std::optional<std::vector<uint8_t>> send_udp(Conf conf)
 }
 
 
-std::optional<std::vector<uint8_t>> send_tcp(Conf conf)
+std::optional<std::vector<char>> send_tcp(Conf conf)
 {
     #ifdef _WIN32
 		WSADATA wsa_data;
@@ -155,7 +155,7 @@ std::optional<std::vector<uint8_t>> send_tcp(Conf conf)
     }
 
     constexpr int DEFAULT_BUFLEN { 512 };
-    std::vector<uint8_t> recvbuf ( DEFAULT_BUFLEN );
+    std::vector<char> recvbuf ( DEFAULT_BUFLEN );
     ssize_t indicator_recv;
     ssize_t total_recv { 0 };
     do
