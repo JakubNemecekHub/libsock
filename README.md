@@ -6,26 +6,26 @@ Primitive multiplatform static library for TCP and UDP functionality. 🧦
 
 ### Sources of symbols
 
-| What           | Windows | Linux         |
-|----------------|---------|---------------|
-| addrinfo       | ?       | netdb.h       |
-| AF_INET        | ?       | socket.h      |
-| SOCK_STREAM    | ?       | socket_type.h |
-| IPPROTO_TCP    | ?       | in.h          |
-| INVALID_SOCKET | ?       | nowhere       |
-| SOCKET_ERROR   | ?       | nowhere       |
-| getnameinfo    | ?       | netdb.h       |
-| NI_MAXHOST     | ?       | netdb.h       |
-| NI_MAXSERV     | ?       | netdb.h       |
-| NI_NUMERICHOST | ?       | netdb.h       |
-| NI_NUMERICSERV | ?       | netdb.h       |
-| socket         | ?       | socket.h      |
-| bind           | ?       | socket.h      |
-| close          | ?       | unistd.h      |
-| accept         | ?       | socket.h      |
-| recv           | ?       | socket2.h     |
-| send           | ?       | socket.h      |
-| strlen         | ?       | string.h      |
+| What           | Windows         | Linux         |
+|----------------|-----------------|---------------|
+| addrinfo       | ws2tcpip.h      | netdb.h       |
+| AF_INET        | winsock2.h      | socket.h      |
+| SOCK_STREAM    | winsock2.h      | socket_type.h |
+| IPPROTO_TCP    | winsock2.h      | in.h          |
+| INVALID_SOCKET | _socket_types.h | nowhere       |
+| SOCKET_ERROR   | _socket_types.h | nowhere       |
+| getnameinfo    | ws2tcpip.h      | netdb.h       |
+| NI_MAXHOST     | ws2tcpip.h      | netdb.h       |
+| NI_MAXSERV     | ws2tcpip.h      | netdb.h       |
+| NI_NUMERICHOST | ws2tcpip.h      | netdb.h       |
+| NI_NUMERICSERV | ws2tcpip.h      | netdb.h       |
+| socket         | winsock2.h      | socket.h      |
+| bind           | winsock2.h      | socket.h      |
+| close          | winsock2.h      | unistd.h      |
+| accept         | winsock2.h      | socket.h      |
+| recv           | winsock2.h      | socket2.h     |
+| send           | winsock2.h      | socket.h      |
+| strlen         | string.h        | string.h      |
 
 ### Creating IPv4 and IPv6 addresses
 
