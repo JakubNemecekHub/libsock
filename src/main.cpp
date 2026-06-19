@@ -122,8 +122,8 @@ std::optional<std::vector<char>> send_tcp(Conf conf)
         std::println(stderr, "cannot retrieve address");
 	}
 
-    const int indicator_conect { connect(client_socket, result->ai_addr, (int)result->ai_addrlen) };
-    if ( indicator_conect == SOCKET_ERROR )
+    const int indicator_connect { connect(client_socket, result->ai_addr, (int)result->ai_addrlen) };
+    if ( indicator_connect == SOCKET_ERROR )
     {
         std::println("error while connecting to {}:{} {}", ip_buffer, port_buffer, error_message());
 		freeaddrinfo(result);
