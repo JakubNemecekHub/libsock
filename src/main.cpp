@@ -1,6 +1,6 @@
 #include <print>
 
-#include "sock.hpp"
+#include "sock/sock.hpp"
 #include "header.hpp"
 
 namespace sck
@@ -16,7 +16,6 @@ std::optional<std::vector<char>> send_udp(Conf conf)
 			std::println(stderr, "WSAStartup failed with error: {}", indicator_startup);
 			return std::nullopt;
 		}
-		std::println("Winsock Status: {}", wsa_data.szSystemStatus);
 	#endif
 
     addrinfo *result { nullptr };
@@ -57,9 +56,10 @@ std::optional<std::vector<char>> send_udp(Conf conf)
 
     constexpr int DEFAULT_BUFLEN { 65536 };
     std::vector<char> recvbuf ( DEFAULT_BUFLEN );
-    sockaddr from_address;
+    sockaddr_storage from_address {};
     socklen_t from_address_length { sizeof(from_address) };
-    const ssize_t indicator_recv { recvfrom(udp_socket, recvbuf.data(), recvbuf.size(), 0, &from_address, &from_address_length) };
+    const ssize_t indicator_recv { recvfrom(udp_socket, recvbuf.data(), recvbuf.size(), 0,
+		                                    reinterpret_cast<sockaddr*>(&from_address), &from_address_length) };
     if ( indicator_recv < 0 )
     {
         std::println(stderr, "recvfrom failed with error: {}", get_last_error());
@@ -183,7 +183,7 @@ std::optional<std::vector<char>> send_tcp(Conf conf)
 
 void listen_udp(Conf conf)
 {
-#   ifdef _WIN32
+	#ifdef _WIN32
 		WSADATA wsa_data;
 		const int indicator_startup { WSAStartup(MAKEWORD(2, 2), &wsa_data) };
 		if ( indicator_startup != 0 )
@@ -191,7 +191,6 @@ void listen_udp(Conf conf)
 			std::println(stderr, "WSAStartup failed with error: {}", indicator_startup);
 			return;
 		}
-		std::println("Winsock Status: {}", wsa_data.szSystemStatus);
 	#endif
 
 	addrinfo *result { nullptr };
@@ -249,18 +248,21 @@ void listen_udp(Conf conf)
     constexpr size_t DEFAULT_BUFLEN { 65536 };
 	char recvbuf[DEFAULT_BUFLEN];
 	const char *sendbuf { "this is an answer" };
-	sockaddr from_address;
+	sockaddr_storage from_address {};
 	socklen_t from_address_length { sizeof(from_address) };
 
 	while ( true )
 	{
 
-		const ssize_t indicator_recv { recvfrom(udp_socket, recvbuf, sizeof(recvbuf), 0, &from_address, &from_address_length) };
+		from_address_length = sizeof(from_address);
+		const ssize_t indicator_recv { recvfrom(udp_socket, recvbuf, sizeof(recvbuf), 0,
+											    reinterpret_cast<sockaddr*>(&from_address), &from_address_length) };
 		if ( indicator_recv > 0 )
 		{
 			std::println("bytes received: {}", indicator_recv);
 			std::println("payload: {}", std::string_view(recvbuf, indicator_recv));
-			const ssize_t indicator_send { sendto(udp_socket, sendbuf, (int)strlen(sendbuf), 0, &from_address, from_address_length) };
+			const ssize_t indicator_send { sendto(udp_socket, sendbuf, (int)strlen(sendbuf), 0, 
+				                                  reinterpret_cast<sockaddr*>(&from_address), from_address_length) };
 			if ( indicator_send == SOCKET_ERROR )
 			{
 				std::println(stderr, "sendto failed with error: {}", get_last_error());
