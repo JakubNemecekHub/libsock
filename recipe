@@ -1,0 +1,38 @@
+LIB_HEADER = ./include/sock/sock.hpp
+LIB_SOURCE = ./src/main.cpp
+TARGET_O = ./build/lib.o
+TARGET_A = ./lib/libsock.a
+
+STD = -std=c++23
+LIBS = -lstdc++exp
+
+INSTALL_INCLUDE = C:/Workspace/usr/include/sock/sock.hpp
+INSTALL_LIB = C:/Workspace/usr/lib/libsock.a
+
+build : {LIB_HEADER} {LIB_SOURCE} > {TARGET_O}
+# Build library in DEBUG mode
+{
+    g++ {STD} -O0 -g -Wall -c -I./include {LIB_SOURCE} -o {TARGET_O} {LIBS}
+}
+
+release : {LIB_HEADER} {LIB_SOURCE} > {TARGET_O}
+# Build library in RELEASE mode
+{
+    g++ {STD} -O2 -Wall -DNDEBUG -c -I./include {LIB_SOURCE} -o {TARGET_O} {LIBS}
+}
+
+lib : release > {TARGET_A}
+# Create the library file
+{
+    mkdir -Force ./lib
+    ar rcs {TARGET_A} {TARGET_O}
+}
+
+install : lib > {INSTALL_INCLUDE} {INSTALL_LIB}
+# Install library user wide
+{
+    mkdir -Force C:/Workspace/usr/include/sock
+    cp include/sock/sock.hpp {INSTALL_INCLUDE}
+
+    cp lib/libsock.a {INSTALL_LIB}
+}
