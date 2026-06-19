@@ -84,7 +84,6 @@ std::optional<std::vector<char>> send_tcp(Conf conf)
 			std::println(stderr, "WSAStartup failed with error: {}", indicator_startup);
 			return std::nullopt;
 		}
-		std::println("Winsock Status: {}", wsa_data.szSystemStatus);
 	#endif
 
     addrinfo *result { nullptr };
@@ -300,7 +299,6 @@ void listen_tcp(Conf conf)
 			std::println(stderr, "WSAStartup failed with error: {}", indicator_startup);
 			return;
 		}
-		std::println("Winsock Status: {}", wsa_data.szSystemStatus);
 	#endif
 
 	addrinfo *result { nullptr };
